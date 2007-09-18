@@ -1,6 +1,6 @@
 %define name	gdesklets
 %define version	0.35.4
-%define release	%mkrel 3
+%define release	%mkrel 4
 %define oname	gDesklets
 
 Summary:	GNOME Desktop Applets
