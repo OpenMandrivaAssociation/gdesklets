@@ -1,20 +1,20 @@
-%define name gdesklets
-%define version 0.35.4
-%define release %mkrel 2
-%define oname gDesklets
+%define name	gdesklets
+%define version	0.35.4
+%define release	%mkrel 3
+%define oname	gDesklets
 
-Summary: GNOME Desktop Applets
-Name: %{name}
-Version: %{version}
-Release: %{release}
-Source0: http://gdesklets.org//downloads/%oname-%{version}.tar.bz2
-Source1: %name-32.png
-Source2: %name-16.png
-Patch0: %{oname}-0.34.1-no-mime-update.patch
-License: GPL
-Group: Graphical desktop/GNOME
-BuildRoot: %{_tmppath}/%{name}-buildroot
-URL: http://www.gdesklets.org/
+Summary:	GNOME Desktop Applets
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
+Source0:	http://www.gdesklets.de//downloads/%oname-%{version}.tar.bz2
+Source1:	%name-32.png
+Source2:	%name-16.png
+#Patch0:		%{oname}-0.34.1-no-mime-update.patch
+License:	GPL
+Group:		Graphical desktop/GNOME
+BuildRoot:	%{_tmppath}/%{name}-buildroot
+URL:		http://www.gdesklets.de/
 BuildRequires:	python-devel > 2.0.0
 BuildRequires:  pyorbit-devel  
 BuildRequires:	pygtk2.0-devel > 2.4.0
@@ -30,11 +30,10 @@ Requires:	gnome-python-gconf >= 2.6.0
 Requires(Pre):	shared-mime-info
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
-Requires: gnome-python gnome-python-gconf gnome-python-gtkhtml2
-Requires: gnome-python-gnomevfs
-
-Obsoletes: gdesklets-starter-kit gdesklets-externalsensor
-Provides: gdesklets-externalsensor
+Requires:	gnome-python gnome-python-gconf gnome-python-gtkhtml2
+Requires:	gnome-python-gnomevfs
+Obsoletes:	gdesklets-starter-kit gdesklets-externalsensor
+Provides:	gdesklets-externalsensor
 
 %description
 'gDesklets' provides an advanced architecture for desktop applets -
@@ -47,11 +46,11 @@ possible and maybe even available some day.
 
 %prep
 %setup -q -n %oname-%version
-%patch0 -p1 -b .no-mime
+#%patch0 -p1 -b .no-mime
 #needed by patch 0
-aclocal
-autoconf
-automake -a -c
+#aclocal
+#autoconf
+#automake -a -c
 
 %build
 %configure2_5x --disable-schemas-install
@@ -62,23 +61,17 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 %find_lang %{name}
 
-install -d %{buildroot}%{_menudir}
-cat <<EOF > %{buildroot}%{_menudir}/%{name}
-?package(%{name}):command="gdesklets shell" \
-		icon=%{name}.png \
-		needs="x11" \
-		section="Applications/Monitoring" \
-		title="Gdesklets"\
-		startup_notify="yes"\
-		longtitle="Put applets on your GNOME desktop"\
-		xdg=true
-EOF
+#remove mime related stuff
+rm -rf ${RPM_BUILD_ROOT}%{_datadir}/mime/application
+rm -rf ${RPM_BUILD_ROOT}%{_datadir}/mime/{globs,magic,XMLnamespaces,aliases,subclasses,mime.cache}
+rm -f ${RPM_BUILD_ROOT}%{_datadir}/applications/mimeinfo.cache
+
+perl -pi -e 's,%{name}.png,%{name},g' %{buildroot}%{_datadir}/applications/*
 
 desktop-file-install --vendor="" \
   --remove-category="Application" \
   --add-category="GTK" \
   --add-category="System;Monitor" \
-  --add-category="X-MandrivaLinux-System-Monitoring" \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/*		  
  
 install -d %buildroot%_liconsdir
@@ -107,7 +100,6 @@ rm -rf $RPM_BUILD_ROOT
 %_datadir/pixmaps/%{name}.png
 %_datadir/icons/gnome/48x48/mimetypes/gnome-mime-application-x-%{name}-display.png
 %_mandir/man1/%{name}.1*
-%_menudir/%name
 %_liconsdir/%name.png
 %_iconsdir/%name.png
 %_miconsdir/%name.png
