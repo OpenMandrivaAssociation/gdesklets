@@ -13,7 +13,6 @@ Source2:	%name-16.png
 #Patch0:		%{oname}-0.34.1-no-mime-update.patch
 License:	GPL
 Group:		Graphical desktop/GNOME
-BuildRoot:	%{_tmppath}/%{name}-buildroot
 URL:		http://www.gdesklets.de/
 BuildRequires:	python-devel > 2.0.0
 BuildRequires:  pyorbit-devel  
