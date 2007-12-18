@@ -1,13 +1,13 @@
 %define name	gdesklets
-%define version	0.35.4
-%define release	%mkrel 4
+%define version	0.36
+%define release	%mkrel 0.beta.0
 %define oname	gDesklets
 
 Summary:	GNOME Desktop Applets
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-Source0:	http://www.gdesklets.de//downloads/%oname-%{version}.tar.bz2
+Source0:	http://www.gdesklets.de//downloads/%oname-%{version}beta.tar.bz2
 Source1:	%name-32.png
 Source2:	%name-16.png
 #Patch0:		%{oname}-0.34.1-no-mime-update.patch
@@ -44,12 +44,7 @@ news tickers... whatever you can imagine! Virtually anything is
 possible and maybe even available some day.
 
 %prep
-%setup -q -n %oname-%version
-#%patch0 -p1 -b .no-mime
-#needed by patch 0
-#aclocal
-#autoconf
-#automake -a -c
+%setup -q -n %{oname}-%{version}beta
 
 %build
 %configure2_5x --disable-schemas-install
