@@ -14,7 +14,7 @@ Source2:	%name-16.png
 License:	GPL
 Group:		Graphical desktop/GNOME
 URL:		http://www.gdesklets.de/
-BuildRequires:	python-devel > 2.0.0
+BuildRequires:	gnome-python-devel
 BuildRequires:  pyorbit-devel  
 BuildRequires:	pygtk2.0-devel > 2.4.0
 BuildRequires:  librsvg2-devel 
