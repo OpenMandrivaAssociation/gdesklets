@@ -1,6 +1,6 @@
 %define name	gdesklets
 %define version	0.36
-%define release	%mkrel 0.beta.1
+%define release	%mkrel 0.beta.2
 %define oname	gDesklets
 
 Summary:	GNOME Desktop Applets
@@ -61,10 +61,12 @@ rm -rf ${RPM_BUILD_ROOT}%{_datadir}/mime/application
 rm -rf ${RPM_BUILD_ROOT}%{_datadir}/mime/{globs,magic,XMLnamespaces,aliases,subclasses,mime.cache}
 rm -f ${RPM_BUILD_ROOT}%{_datadir}/applications/mimeinfo.cache
 
-#fix exec symlink for x86_64
+#workaround bad exec symlink for x86_64
+%ifarch x86_64
 rm -f ${RPM_BUILD_ROOT}%{_bindir}/%{name}
-ln -s ${RPM_BUILD_ROOT}%{_libdir}/%{name} ${RPM_BUILD_ROOT}/%{_bindir}/%{name}
- 
+cd ${RPM_BUILD_ROOT}/%{_bindir}
+ln -s %{_libdir}/%{name}/%{name} %{name}
+%endif
 
 perl -pi -e 's,%{name}.png,%{name},g' %{buildroot}%{_datadir}/applications/*
 
