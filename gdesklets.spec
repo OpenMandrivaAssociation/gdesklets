@@ -1,16 +1,14 @@
 %define name	gdesklets
 %define version	0.36
-%define release	%mkrel 0.beta.2
-%define oname	gDesklets
+%define release	%mkrel 1
 
 Summary:	GNOME Desktop Applets
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-Source0:	http://www.gdesklets.de//downloads/%oname-%{version}beta.tar.bz2
+Source0:	http://gdesklets.de/files/%{name}-%{version}.tar.bz2
 Source1:	%name-32.png
 Source2:	%name-16.png
-#Patch0:		%{oname}-0.34.1-no-mime-update.patch
 License:	GPL
 Group:		Graphical desktop/GNOME
 BuildRoot:	%{_tmppath}/%{name}-buildroot
@@ -22,18 +20,16 @@ BuildRequires:  librsvg2-devel
 BuildRequires:	libgtop2.0-devel >= 2.8.0
 BuildRequires:	libxdmcp-devel
 BuildRequires:  libxau-devel
-BuildRequires:	gnome-python >= 2.0.0
 BuildRequires:	libgnome2-devel > 2.6.0
-BuildRequires:  desktop-file-utils, libgnomeui2-devel >= 2.2.0
-BuildRequires:	librsvg-devel swig automake intltool
+BuildRequires:  desktop-file-utils
+BuildRequires:	libgnomeui2-devel >= 2.2.0
+BuildRequires:	librsvg-devel intltool
 Requires:	gnome-python-gconf >= 2.6.0
 Requires(Pre):	shared-mime-info
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
 Requires:	gnome-python gnome-python-gconf gnome-python-gtkhtml2
 Requires:	gnome-python-gnomevfs
-Obsoletes:	gdesklets-starter-kit gdesklets-externalsensor
-Provides:	gdesklets-externalsensor
 
 %description
 'gDesklets' provides an advanced architecture for desktop applets -
@@ -45,7 +41,7 @@ news tickers... whatever you can imagine! Virtually anything is
 possible and maybe even available some day.
 
 %prep
-%setup -q -n %{oname}-%{version}beta
+%setup -q
 
 %build
 %configure2_5x --disable-schemas-install
@@ -62,11 +58,11 @@ rm -rf ${RPM_BUILD_ROOT}%{_datadir}/mime/{globs,magic,XMLnamespaces,aliases,subc
 rm -f ${RPM_BUILD_ROOT}%{_datadir}/applications/mimeinfo.cache
 
 #workaround bad exec symlink for x86_64
-%ifarch x86_64
-rm -f ${RPM_BUILD_ROOT}%{_bindir}/%{name}
-cd ${RPM_BUILD_ROOT}/%{_bindir}
-ln -s %{_libdir}/%{name}/%{name} %{name}
-%endif
+#%ifarch x86_64
+#rm -f ${RPM_BUILD_ROOT}%{_bindir}/%{name}
+#cd ${RPM_BUILD_ROOT}/%{_bindir}
+#ln -s %{_libdir}/%{name}/%{name} %{name}
+#%endif
 
 perl -pi -e 's,%{name}.png,%{name},g' %{buildroot}%{_datadir}/applications/*
 
