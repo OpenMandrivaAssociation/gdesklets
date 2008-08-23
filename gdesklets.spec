@@ -9,7 +9,8 @@ Release:	%{release}
 Source0:	http://gdesklets.de/files/%{name}-%{version}.tar.bz2
 Source1:	%name-32.png
 Source2:	%name-16.png
-License:	GPL
+Patch0:		destdir.patch
+License:	GPLv2+
 Group:		Graphical desktop/GNOME
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 URL:		http://www.gdesklets.de/
@@ -42,8 +43,12 @@ possible and maybe even available some day.
 
 %prep
 %setup -q
+%patch0
 
 %build
+# FIXME: temporary workaround to get intltool-merge working. Will get fixed with a new release (> 0.36) released with a newer intltool.
+intltoolize --force --copy
+autoreconf -f -i
 %configure2_5x --disable-schemas-install
 %make 
 
@@ -53,16 +58,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %find_lang %{name}
 
 #remove mime related stuff
-rm -rf ${RPM_BUILD_ROOT}%{_datadir}/mime/application
-rm -rf ${RPM_BUILD_ROOT}%{_datadir}/mime/{globs,magic,XMLnamespaces,aliases,subclasses,mime.cache}
-rm -f ${RPM_BUILD_ROOT}%{_datadir}/applications/mimeinfo.cache
-
-#workaround bad exec symlink for x86_64
-#%ifarch x86_64
-#rm -f ${RPM_BUILD_ROOT}%{_bindir}/%{name}
-#cd ${RPM_BUILD_ROOT}/%{_bindir}
-#ln -s %{_libdir}/%{name}/%{name} %{name}
-#%endif
+#rm -rf ${RPM_BUILD_ROOT}%{_datadir}/mime/application
+#rm -rf ${RPM_BUILD_ROOT}%{_datadir}/mime/{globs,magic,XMLnamespaces,aliases,subclasses,mime.cache}
+#rm -f ${RPM_BUILD_ROOT}%{_datadir}/applications/mimeinfo.cache
 
 perl -pi -e 's,%{name}.png,%{name},g' %{buildroot}%{_datadir}/applications/*
 
