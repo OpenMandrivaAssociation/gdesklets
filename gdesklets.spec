@@ -1,12 +1,12 @@
 %define name	gdesklets
-%define version	0.36
-%define release	%mkrel 3
+%define version	0.36.1
+%define release	%mkrel 1
 
 Summary:	GNOME Desktop Applets
 Name:		%{name}
 Version:	%{version}
 Release:	%{release}
-Source0:	http://gdesklets.de/files/%{name}-%{version}.tar.bz2
+Source0:	http://gdesklets.de/files/%{name}-%{version}.tar.gz
 Source1:	%name-32.png
 Source2:	%name-16.png
 Patch0:		destdir.patch
@@ -42,7 +42,7 @@ news tickers... whatever you can imagine! Virtually anything is
 possible and maybe even available some day.
 
 %prep
-%setup -q
+%setup -q -n gDesklets-%{version}
 %patch0
 
 %build
