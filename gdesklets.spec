@@ -1,6 +1,6 @@
 %define name	gdesklets
 %define version	0.36.1
-%define release	%mkrel 1
+%define release	%mkrel 2
 
 Summary:	GNOME Desktop Applets
 Name:		%{name}
@@ -46,15 +46,15 @@ possible and maybe even available some day.
 %patch0
 
 %build
-# FIXME: temporary workaround to get intltool-merge working. Will get fixed with a new release (> 0.36) released with a newer intltool.
+# FIXME: temporary workaround to get intltool-merge working. Will get fixed with a new release (> 0.36.1) released with a newer intltool.
 intltoolize --force --copy
 autoreconf -f -i
 %configure2_5x --disable-schemas-install
 %make 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
+rm -rf %{buildroot}
+make install DESTDIR=%{buildroot}
 %find_lang %{name}
 
 #remove mime related stuff
@@ -68,7 +68,7 @@ desktop-file-install --vendor="" \
   --remove-category="Application" \
   --add-category="GTK" \
   --add-category="System;Monitor" \
-  --dir $RPM_BUILD_ROOT%{_datadir}/applications $RPM_BUILD_ROOT%{_datadir}/applications/*		  
+  --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/*		  
  
 install -d %buildroot%_liconsdir
 ln -s %_datadir/pixmaps/%name.png %buildroot%_liconsdir
@@ -76,7 +76,7 @@ install -D %SOURCE1 %buildroot%_iconsdir/%name.png
 install -D %SOURCE2 %buildroot%_miconsdir/%name.png
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %if %mdkversion < 200900
 %post
