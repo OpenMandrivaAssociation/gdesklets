@@ -1,6 +1,6 @@
 %define name	gdesklets
 %define version	0.36.1
-%define release	%mkrel 2
+%define release	%mkrel 3
 
 Summary:	GNOME Desktop Applets
 Name:		%{name}
@@ -10,6 +10,7 @@ Source0:	http://gdesklets.de/files/%{name}-%{version}.tar.gz
 Source1:	%name-32.png
 Source2:	%name-16.png
 Patch0:		destdir.patch
+Patch1:		gdesklets-0.36.1-no-import-overide.patch
 License:	GPLv2+
 Group:		Graphical desktop/GNOME
 BuildRoot:	%{_tmppath}/%{name}-buildroot
@@ -43,7 +44,8 @@ possible and maybe even available some day.
 
 %prep
 %setup -q -n gDesklets-%{version}
-%patch0
+%patch0 -p0
+%patch1 -p1
 
 %build
 # FIXME: temporary workaround to get intltool-merge working. Will get fixed with a new release (> 0.36.1) released with a newer intltool.
