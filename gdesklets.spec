@@ -1,21 +1,20 @@
 %define name	gdesklets
-%define version	0.36.2
-%define release	%mkrel 1
+%define version	0.36.3
+%define release	1
 
 Summary:	GNOME Desktop Applets
 Name:		%{name}
 Version:	%{version}
-Release:	%{release}
+Release:	%mkre %{release}
+URL:            http://gdesklets.de/
 Source0:	http://gdesklets.de/files/%{name}-%{version}.tar.bz2
-Source1:	%name-32.png
-Source2:	%name-16.png
-Patch0:		destdir.patch
-Patch1:		gdesklets-0.36.2-no-import-override.patch
-Patch2:		gdesklets-0.36.1-mdv-fix-install.patch
+Source1:	%{name}-32.png
+Source2:	%{name}-16.png
+Patch1:		gdesklets-0.36.3-no-import-override.patch
+Patch3:		gdesklets-0.36.3-.in-files.patch
 License:	GPLv2+
 Group:		Graphical desktop/GNOME
 BuildRoot:	%{_tmppath}/%{name}-buildroot
-URL:		http://www.gdesklets.de/
 BuildRequires:	gnome-python-devel
 BuildRequires:  pyorbit-devel  
 BuildRequires:	pygtk2.0-devel > 2.4.0
@@ -27,11 +26,12 @@ BuildRequires:	libgnome2-devel > 2.6.0
 BuildRequires:  desktop-file-utils
 BuildRequires:	libgnomeui2-devel >= 2.2.0
 BuildRequires:	librsvg-devel intltool
-Requires:	gnome-python-gconf >= 2.6.0
-Requires(Pre):	shared-mime-info
+Requires(pre):	shared-mime-info
 Requires(post): desktop-file-utils
 Requires(postun): desktop-file-utils
-Requires:	gnome-python gnome-python-gconf gnome-python-gtkhtml2
+Requires:	gnome-python
+Requires:	gnome-python-gconf >= 2.6.0
+Requires:	gnome-python-gtkhtml2
 Requires:	gnome-python-gnomevfs
 
 %description
@@ -44,27 +44,21 @@ news tickers... whatever you can imagine! Virtually anything is
 possible and maybe even available some day.
 
 %prep
-%setup -q -n gDesklets-%{version}
-%patch0 -p0
+%setup -q
 %patch1 -p0
-%patch2 -p1
+%patch3 -p0
 
 %build
 # FIXME: temporary workaround to get intltool-merge working. Will get fixed with a new release (> 0.36.1) released with a newer intltool.
 #intltoolize --force --copy
 autoreconf -f -i
-%configure2_5x --disable-schemas-install
-%make 
+%configure2_5x
+%make
 
 %install
 rm -rf %{buildroot}
-make install DESTDIR=%{buildroot}
+%makeinstall_std
 %find_lang %{name}
-
-#remove mime related stuff
-#rm -rf ${RPM_BUILD_ROOT}%{_datadir}/mime/application
-#rm -rf ${RPM_BUILD_ROOT}%{_datadir}/mime/{globs,magic,XMLnamespaces,aliases,subclasses,mime.cache}
-#rm -f ${RPM_BUILD_ROOT}%{_datadir}/applications/mimeinfo.cache
 
 perl -pi -e 's,%{name}.png,%{name},g' %{buildroot}%{_datadir}/applications/*
 
@@ -74,36 +68,25 @@ desktop-file-install --vendor="" \
   --add-category="System;Monitor" \
   --dir %{buildroot}%{_datadir}/applications %{buildroot}%{_datadir}/applications/*		  
  
-install -d %buildroot%_liconsdir
-ln -s %_datadir/pixmaps/%name.png %buildroot%_liconsdir
-install -D %SOURCE1 %buildroot%_iconsdir/%name.png
-install -D %SOURCE2 %buildroot%_miconsdir/%name.png
+install -d %{buildroot}%{_liconsdir}
+ln -s %{_datadir}/pixmaps/%{name}.png %{buildroot}%{_liconsdir}
+install -D %{SOURCE1} %{buildroot}%{_iconsdir}/%{name}.png
+install -D %{SOURCE2} %{buildroot}%{_miconsdir}/%{name}.png
 
 %clean
 rm -rf %{buildroot}
 
-%if %mdkversion < 200900
-%post
-%{update_menus}
-%{update_desktop_database}
-%endif
-
-%if %mdkversion < 200900
-%postun
-%{clean_menus}
-%{clean_desktop_database}
-%endif
-
 %files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc AUTHORS COPYING ChangeLog NEWS README
-%_bindir/%name
-%_libdir/%name
-%_datadir/applications/%{name}.desktop
-%_datadir/mime/packages/*
-%_datadir/pixmaps/%{name}.png
-%_datadir/icons/gnome/48x48/mimetypes/gnome-mime-application-x-%{name}-display.png
-%_mandir/man1/%{name}.1*
-%_liconsdir/%name.png
-%_iconsdir/%name.png
-%_miconsdir/%name.png
+%doc AUTHORS ChangeLog NEWS README
+%{_sysconfdir}/xdg/autostart/%{name}.desktop
+%{_bindir}/%{name}
+%{_libdir}/%{name}
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/mime/packages/*
+%{_datadir}/pixmaps/%{name}.png
+%{_datadir}/icons/gnome/48x48/mimetypes/gnome-mime-application-x-%{name}-display.png
+%{_mandir}/man1/%{name}.1*
+%{_liconsdir}/%{name}.png
+%{_iconsdir}/%{name}.png
+%{_miconsdir}/%{name}.png
