@@ -5,7 +5,7 @@
 Summary:	GNOME Desktop Applets
 Name:		%{name}
 Version:	%{version}
-Release:	%mkre %{release}
+Release:	%mkrel %{release}
 URL:            http://gdesklets.de/
 Source0:	http://gdesklets.de/files/%{name}-%{version}.tar.bz2
 Source1:	%{name}-32.png
