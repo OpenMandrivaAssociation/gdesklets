@@ -18,13 +18,13 @@ BuildRoot:	%{_tmppath}/%{name}-buildroot
 BuildRequires:	gnome-python-devel
 BuildRequires:  pyorbit-devel  
 BuildRequires:	pygtk2.0-devel > 2.4.0
-BuildRequires:  librsvg2-devel 
+BuildRequires:  pkgconfig(librsvg-2.0) 
 BuildRequires:	libgtop2.0-devel >= 2.8.0
-BuildRequires:	libxdmcp-devel
-BuildRequires:  libxau-devel
-BuildRequires:	libgnome2-devel > 2.6.0
+BuildRequires:	pkgconfig(xdmcp)
+BuildRequires:  pkgconfig(xau)
+BuildRequires:	pkgconfig(libgnome-2.0) > 2.6.0
 BuildRequires:  desktop-file-utils
-BuildRequires:	libgnomeui2-devel >= 2.2.0
+BuildRequires:	pkgconfig(libgnomeui-2.0) >= 2.2.0
 BuildRequires:	librsvg-devel intltool
 Requires(pre):	shared-mime-info
 Requires(post): desktop-file-utils
