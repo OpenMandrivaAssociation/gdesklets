@@ -14,6 +14,11 @@ Patch1:		gdesklets-0.36.3-no-import-override.patch
 Patch3:		gdesklets-0.36.3-.in-files.patch
 License:	GPLv2+
 Group:		Graphical desktop/GNOME
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	gnome-python-devel
 BuildRequires:  pyorbit-devel  
 BuildRequires:	pygtk2.0-devel > 2.4.0
